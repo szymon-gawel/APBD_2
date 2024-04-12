@@ -10,7 +10,7 @@ namespace LegacyApp
         /// Simulating database
         /// </summary>
         private readonly Dictionary<string, int> _database =
-            new Dictionary<string, int>()
+            new()
             {
                 {"Kowalski", 200},
                 {"Malewski", 20000},
@@ -28,13 +28,13 @@ namespace LegacyApp
         /// This method is simulating contact with remote service which is used to get info about someone's credit limit
         /// </summary>
         /// <returns>Client's credit limit</returns>
-        internal int GetCreditLimit(string lastName, DateTime dateOfBirth)
+        internal int GetCreditLimit(string lastName)
         {
-            int randomWaitingTime = new Random().Next(3000);
+            var randomWaitingTime = new Random().Next(3000);
             Thread.Sleep(randomWaitingTime);
 
-            if (_database.ContainsKey(lastName))
-                return _database[lastName];
+            if (_database.TryGetValue(lastName, out var limit))
+                return limit;
 
             throw new ArgumentException($"Client {lastName} does not exist");
         }
